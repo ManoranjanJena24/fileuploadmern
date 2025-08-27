@@ -19,12 +19,12 @@ const storage = multer.diskStorage({
     cb(null,newFileName)
   },
 });
-
+// file.mimetype.startsWith('image/')
 const fileFilter=(req,file,cb)=>{
-    if(file.mimetype.startsWith('image/')){
-        cb(null , true)
-    }else{
-        cb(new Error('Only images are allowed!!'),false)
+    if (file.mimetype == "image/jpeg" || file.mimetype == "image/png") {
+      cb(null, true);
+    } else {
+      cb(new Error("Only images are allowed!!"), false);
     }
 }
 
@@ -44,7 +44,38 @@ app.get("/", (req, res) => {
 });
 
 app.post("/submitform", upload.single('userfile'),(req,res)=>{
-    res.send(req.file)
+
+
+    if(!req.file || req.file.length === 0 ){
+        return res.status(400).send(`No files uploaded`)
+    }
+
+
+
+
+    // res.send(req.file)     //this will give very much data
+
+//     {
+//   "fieldname": "userfile",
+//   "originalname": "photo.jpg",
+//   "encoding": "7bit",
+//   "mimetype": "image/jpeg",
+//   "destination": "./uploads",
+//   "filename": "1756310223630.jpg",
+//   "path": "uploads\\1756310223630.jpg",
+//   "size": 194560
+// }
+
+
+
+    res.send(req.file.filename)
+},(error,req,res,next)=>{
+    if(error instanceof multer.MulterError){
+        return res.status(400).send(`Multer error: ${error.message}`)
+    }else if(error){
+         return res.status(500).send(`Something went wrong: ${error.message}`);
+    }
+    next()
 });
 
 // Start server
