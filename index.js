@@ -63,16 +63,16 @@ app.post(
     // }
 
     res.send(req.file.filename);
-  },
-  (error, req, res, next) => {
+  });
+
+  app.use((error, req, res, next) => {
     if (error instanceof multer.MulterError) {
       return res.status(400).send(`Multer error: ${error.message}`);
     } else if (error) {
       return res.status(500).send(`Something went wrong: ${error.message}`);
     }
     next();
-  }
-);
+  });
 
 // Start server
 app.listen(3000, () => {
