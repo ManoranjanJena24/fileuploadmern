@@ -1,39 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-  <div class="container">
-    <div class="row">
-      <div class="col-6">
-        <h1>File Upload</h1>
-      </div>
-    </div>
-
-    <!-- Form -->
-    <form action="/submitform" method="POST" enctype="multipart/form-data">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
       <div class="row">
         <div class="col-6">
-          <div class="mb-3">
-            <label for="nameinput" class="form-label">Name</label>
-            <input type="text" name="username" class="form-control" id="nameinput" placeholder="Enter your name">
-          </div>
-
-          <div class="mb-3">
-            <label for="fileinput" class="form-label">Upload File</label>
-            <input type="file" multiple="multiple" name="userfile" class="form-control" id="fileinput">
-          </div>
-
-          <div>
-            <input type="submit" class="btn btn-primary" value="Submit">
-          </div>
+          <h1>File Upload</h1>
         </div>
       </div>
-    </form>
-  </div>
-</body>
+
+      <!-- Form -->
+      <form action="/submitform" method="POST" enctype="multipart/form-data">
+        <div class="row">
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="nameinput" class="form-label">Name</label>
+              <input
+                type="text"
+                name="username"
+                class="form-control"
+                id="nameinput"
+                placeholder="Enter your name"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="fileinput" class="form-label">Upload File</label>
+              <input
+                type="file"
+                name="userfile"
+                class="form-control"
+                id="fileinput"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="fileinput" class="form-label">Documents File</label>
+              <input
+                type="file"
+                multiple="multiple"
+                name="userdocuments"
+                class="form-control"
+                id="fileinput"
+              />
+            </div>
+
+            <div>
+              <input type="submit" class="btn btn-primary" value="Submit" />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
 </html>

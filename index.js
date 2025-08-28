@@ -20,20 +20,53 @@ const storage = multer.diskStorage({
   },
 });
 // file.mimetype.startsWith('image/')
+
+
+// const fileFilter = (req, file, cb) => {
+//   if (file.mimetype == "image/jpeg" || file.mimetype == "image/png") {
+//     cb(null, true);
+//   } else {
+//     cb(new Error("Only images are allowed!!"), false);
+//   }
+// };
+
+
+
+// Custom file filter
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype == "image/jpeg" || file.mimetype == "image/png") {
-    cb(null, true);
+  if (file.fieldname === "userfile") {
+    // only images for userfile
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+      cb(null, true);
+    } else {
+      cb(new Error("Only JPG/PNG images allowed for userfile!!"), false);
+    }
+  } else if (file.fieldname === "userdocuments") {
+    // images OR pdf for userdocuments
+    if (
+      file.mimetype === "image/jpeg" ||
+      file.mimetype === "image/png" ||
+      file.mimetype === "application/pdf"
+    ) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only JPG/PNG/PDF allowed for userdocuments!!"), false);
+    }
   } else {
-    cb(new Error("Only images are allowed!!"), false);
+    cb(new Error("Unknown field!!"), false);
   }
 };
+
+
+
+
 
 const upload = multer({
   storage: storage,
   limits: {
     fileSize: 1024 * 1024 * 3,
   },
-  fileFilter: fileFilter,
+  // fileFilter: fileFilter,
 });
 
 // Routes
@@ -41,10 +74,44 @@ app.get("/", (req, res) => {
   res.render("myform"); // Looks for views/myform.ejs
 });
 
+// app.post(
+//   "/submitform",
+//   // upload.single("userfile"),
+//   upload.array("userfile", 3),
+//   (req, res) => {
+//     if (!req.files || req.files.length === 0) {
+//       return res.status(400).send(`No files uploaded`);
+//     }
+
+//     // res.send(req.file)     //this will give very much data
+
+//     //     {
+//     //   "fieldname": "userfile",
+//     //   "originalname": "photo.jpg",
+//     //   "encoding": "7bit",
+//     //   "mimetype": "image/jpeg",
+//     //   "destination": "./uploads",
+//     //   "filename": "1756310223630.jpg",
+//     //   "path": "uploads\\1756310223630.jpg",
+//     //   "size": 194560
+//     // }
+
+//     res.send(req.files);
+//   }
+// );
+
+
+
+
+
+
 app.post(
   "/submitform",
   // upload.single("userfile"),
-  upload.array("userfile", 3),
+  upload.fields([
+    {name:'userfile',maxCount:1},
+    {name:'userdocuments',maxCount:3}
+  ]),
   (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).send(`No files uploaded`);
@@ -66,6 +133,10 @@ app.post(
     res.send(req.files);
   }
 );
+
+
+
+
 
 app.use((error, req, res, next) => {
   if (error instanceof multer.MulterError) {
